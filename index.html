@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Atendimento</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #FFD700; /* Amarelo principal */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+            border-radius: 20px; /* Borda arredondada no body para simular o contorno da imagem */
+        }
+        .panel-container {
+            background-color: #FFD700; /* Amarelo principal */
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 100%;
+            max-width: 700px; /* Ajuste conforme a proporção da imagem */
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .header-text {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #FFFFFF; /* Texto branco */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            background-color: #FFD700; /* Mesma cor do fundo para o cabeçalho */
+            padding: 10px 0;
+            border-radius: 10px;
+        }
+        .sections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .section-box {
+            background-color: #FFEC8B; /* Amarelo mais claro para as caixas */
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333; /* Texto escuro */
+            margin-bottom: 10px;
+        }
+        .ficha-atendendo {
+            font-size: 5em;
+            font-weight: bold;
+            color: #28a745; /* Verde para a ficha principal */
+            animation: pulse 1.5s infinite alternate;
+        }
+        .guiche-atendendo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        .chamadas-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        .chamadas-list-item {
+            font-size: 1.8em; /* REDUZIDO: Para caber "FICHA GUICHÊ X" na mesma linha */
+            font-weight: bold;
+            color: #dc3545; /* Vermelho para chamadas */
+            margin-bottom: 5px;
+            white-space: nowrap; /* Garante que o texto não quebre linha */
+        }
+        /* Novo estilo para a área da mensagem marquee */
+        .marquee-box {
+            background-color: #FFEC8B; /* Amarelo mais claro */
+            border-radius: 15px;
+            padding: 15px 20px; /* Ajustado padding para a marquee */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-size: 2.2em; /* Tamanho da fonte para a mensagem */
+            font-weight: bold;
+            color: #333;
+            overflow: hidden; /* Garante que o texto rola dentro da caixa */
+        }
+        .marquee-text {
+            white-space: nowrap; /* Impede que o texto quebre linha */
+            display: inline-block; /* Necessário para animação de rolagem */
+            padding-left: 100%; /* Inicia o texto fora da tela à direita */
+            animation: marquee 15s linear infinite; /* Animação de rolagem */
+        }
+        /* Animação de rolagem (marquee) */
+        @keyframes marquee {
+            0%   { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
+        .no-data-message {
+            font-size: 1.8em;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        /* Animação de Pulsar */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.05); opacity: 0.9; }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .panel-container { padding: 20px; }
+            .header-text { font-size: 2.5em; }
+            .sections-grid { grid-template-columns: 1fr; } /* Coluna única em telas menores */
+            .section-title { font-size: 1.5em; }
+            .ficha-atendendo { font-size: 4em; }
+            .guiche-atendendo { font-size: 2em; }
+            .chamadas-list-item { font-size: 1.6em; } /* Ajuste responsivo */
+            .marquee-box { font-size: 1.8em; padding: 10px 15px; }
+            .no-data-message { font-size: 1.5em; }
+        }
+
+        @media (max-width: 480px) {
+            .panel-container { padding: 15px; }
+            .header-text { font-size: 2em; }
+            .section-title { font-size: 1.2em; }
+            .ficha-atendendo { font-size: 3em; }
+            .guiche-atendendo { font-size: 1.5em; }
+            .chamadas-list-item { font-size: 1.3em; } /* Ajuste responsivo */
+            .marquee-box { font-size: 1.5em; padding: 8px 10px; }
+            .no-data-message { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="panel-container">
+        <div class="header-text">AGUARDE SUA VEZ</div>
+
+        <div class="sections-grid">
+            <!-- Seção ATENDENDO -->
+            <div class="section-box">
+                <div class="section-title">ATENDENDO</div>
+                <p id="atendendoFicha" class="ficha-atendendo">--</p>
+                <p id="atendendoGuiche" class="guiche-atendendo">GUICHÊ --</p>
+            </div>
+
+            <!-- Seção CHAMADAS -->
+            <div class="section-box">
+                <div class="section-title">CHAMADAS</div>
+                <ul id="chamadasList" class="chamadas-list">
+                    <!-- Fichas chamadas serão inseridas aqui pelo JS -->
+                    <li class="chamadas-list-item">--</li>
+                    <li class="chamadas-list-item">--</li>
+                    <li class="chamadas-list-item">--</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Seção MENSAGEM MARQUEE -->
+        <div class="marquee-box">
+            <span id="marqueeMessage" class="marquee-text">Auri Autopeças - 84 3087.0000</span>
+        </div>
+
+        <p id="loadingMessage" class="no-data-message">Carregando dados...</p>
+        <p id="errorMessage" class="no-data-message hidden text-red-500">Erro ao carregar dados.</p>
+    </div>
+
+    <script>
+        // SUA URL DA API DO REPLIT
+        const API_BASE_URL = "https://945e81db-7b7e-4538-9480-530153b93654-00-dv9w0qyz7nyp.riker.replit.dev/";
+        const REFRESH_INTERVAL = 10000; // Atualiza a cada 10 segundos (10000 milissegundos)
+
+        async function updateDisplayPanel() {
+            const atendendoFichaEl = document.getElementById('atendendoFicha');
+            const atendendoGuicheEl = document.getElementById('atendendoGuiche');
+            const chamadasListEl = document.getElementById('chamadasList');
+            const marqueeMessageEl = document.getElementById('marqueeMessage');
+            const loadingMessageEl = document.getElementById('loadingMessage');
+            const errorMessageEl = document.getElementById('errorMessage');
+
+            loadingMessageEl.classList.remove('hidden');
+            errorMessageEl.classList.add('hidden');
+
+            // Limpa os dados anteriores
+            atendendoFichaEl.innerText = '--';
+            atendendoGuicheEl.innerText = 'GUICHÊ --';
+            chamadasListEl.innerHTML = '<li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li>';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}ficha_atual`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    loadingMessageEl.classList.add('hidden'); // Esconde mensagem de carregamento
+
+                    // Ficha em Atendimento
+                    if (data.ficha_em_atendimento && data.ficha_em_atendimento.ficha) {
+                        atendendoFichaEl.innerText = data.ficha_em_atendimento.ficha;
+                        atendendoGuicheEl.innerText = `GUICHÊ ${data.ficha_em_atendimento.guiche}`;
+                    } else {
+                        atendendoFichaEl.innerText = '--';
+                        atendendoGuicheEl.innerText = 'GUICHÊ --';
+                    }
+
+                    // Fichas Chamadas Recentes
+                    chamadasListEl.innerHTML = ''; // Limpa a lista
+                    if (data.fichas_chamadas_recentes && data.fichas_chamadas_recentes.length > 0) {
+                        data.fichas_chamadas_recentes.forEach(item => {
+                            const li = document.createElement('li');
+                            li.className = 'chamadas-list-item';
+                            li.innerText = `${item.ficha} GUICHÊ ${item.guiche}`;
+                            chamadasListEl.appendChild(li);
+                        });
+                    } else {
+                        chamadasListEl.innerHTML = '<li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li>';
+                    }
+
+                } else {
+                    errorMessageEl.classList.remove('hidden');
+                    errorMessageEl.innerText = `Erro: ${data.error || data.message || 'Falha ao obter dados.'}`;
+                    console.error('Erro na API:', data);
+                }
+
+            } catch (error) {
+                errorMessageEl.classList.remove('hidden');
+                errorMessageEl.innerText = `Erro de conexão: ${error.message}.`;
+                console.error('Falha ao conectar à API para obter dados do painel:', error);
+            }
+        }
+
+        // Chama a função imediatamente ao carregar a página
+        updateDisplayPanel();
+
+        // Configura a atualização automática a cada X segundos
+        setInterval(updateDisplayPanel, REFRESH_INTERVAL);
+    </script>
+</body>
+</html>
