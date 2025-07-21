@@ -130,9 +130,9 @@
 
         /* Responsividade */
         @media (max-width: 768px) {
-            .panel-container { padding: 20px; max-width: 90%; } /* Ajuste de largura para telas menores */
+            .panel-container { padding: 20px; max-width: 90%; } 
             .header-text { font-size: 2.5em; }
-            .sections-grid { grid-template-columns: 1fr; } /* Garante coluna única em telas menores também */
+            .sections-grid { grid-template-columns: 1fr; } 
             .section-title { font-size: 1.5em; }
             .ficha-atendendo { font-size: 4em; }
             .guiche-atendendo { font-size: 2em; }
@@ -142,7 +142,7 @@
         }
 
         @media (max-width: 480px) {
-            .panel-container { padding: 15px; max-width: 95%; } /* Ajuste de largura para telas muito pequenas */
+            .panel-container { padding: 15px; max-width: 95%; } 
             .header-text { font-size: 2em; }
             .section-title { font-size: 1.2em; }
             .ficha-atendendo { font-size: 3em; }
@@ -150,6 +150,44 @@
             .chamadas-list-item { font-size: 1.3em; } 
             .marquee-box { font-size: 1.5em; padding: 8px 10px; }
             .no-data-message { font-size: 1.2em; }
+        }
+
+        /* Estilo para o overlay de habilitação de áudio */
+        .audio-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Garante que fique acima de tudo */
+            flex-direction: column;
+            gap: 20px;
+        }
+        .audio-overlay-button {
+            background-color: #28a745; /* Verde vibrante */
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .audio-overlay-button:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+        }
+        .audio-overlay-message {
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            max-width: 80%;
         }
     </style>
 </head>
@@ -186,18 +224,44 @@
         <p id="errorMessage" class="no-data-message hidden text-red-500">Erro ao carregar dados.</p>
     </div>
 
+    <!-- Elemento de áudio -->
+    <audio id="notificationSound" src="https://www.soundjay.com/buttons/beep-07.mp3" preload="auto"></audio>
+    <!-- 
+        IMPORTANTE: Se o áudio ainda não funcionar, por favor, tente:
+        1. Trocar o 'src' acima para um arquivo de áudio que você hospede localmente (ex: "beep.mp3" no mesmo diretório).
+           Exemplo: <audio id="notificationSound" src="beep.mp3" preload="auto"></audio>
+        2. Certifique-se de que o arquivo de áudio está acessível e não há bloqueios de rede/CORS.
+        3. Verifique as configurações de autoplay do seu navegador (ex: chrome://settings/content/sound no Chrome).
+    -->
+
+    <!-- Overlay para habilitar áudio -->
+    <div id="audioOverlay" class="audio-overlay">
+        <p class="audio-overlay-message">Para habilitar o áudio das chamadas, por favor, clique no botão abaixo.</p>
+        <button id="enableAudioButton" class="audio-overlay-button">
+            Habilitar Áudio
+        </button>
+        <p id="audioEnableStatus" class="text-red-400 text-base mt-4 hidden"></p> <!-- Área para mensagem de status do áudio -->
+    </div>
+
     <script>
         // SUA URL DA API DO REPLIT
         const API_BASE_URL = "https://945e81db-7b7e-4538-9480-530153b93654-00-dv9w0qyz7nyp.riker.replit.dev/";
         const REFRESH_INTERVAL = 10000; // Atualiza a cada 10 segundos (10000 milissegundos)
 
+        let lastCalledFicha = null; // Variável para armazenar a última ficha chamada e evitar tocar o som repetidamente
+        let audioEnabled = false; // Nova variável para controlar se o áudio está habilitado
+
         async function updateDisplayPanel() {
             const atendendoFichaEl = document.getElementById('atendendoFicha');
-            const atendendoGuicheEl = document.getElementById('atendendoGuiche');
+            const atendendoGuicheEl = document.getElementById('atendendoGuiche'); 
             const chamadasListEl = document.getElementById('chamadasList');
             const marqueeMessageEl = document.getElementById('marqueeMessage');
             const loadingMessageEl = document.getElementById('loadingMessage');
             const errorMessageEl = document.getElementById('errorMessage');
+            const notificationSound = document.getElementById('notificationSound');
+
+            console.log("updateDisplayPanel: Iniciando atualização do painel."); // DEBUG
+            console.log("updateDisplayPanel: audioEnabled =", audioEnabled); // DEBUG
 
             loadingMessageEl.classList.remove('hidden');
             errorMessageEl.classList.add('hidden');
@@ -212,19 +276,33 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    loadingMessageEl.classList.add('hidden'); // Esconde mensagem de carregamento
+                    loadingMessageEl.classList.add('hidden');
 
                     // Ficha em Atendimento
                     if (data.ficha_em_atendimento && data.ficha_em_atendimento.ficha) {
-                        atendendoFichaEl.innerText = data.ficha_em_atendimento.ficha;
+                        const currentFicha = data.ficha_em_atendimento.ficha;
+                        atendendoFichaEl.innerText = currentFicha;
                         atendendoGuicheEl.innerText = `GUICHÊ ${data.ficha_em_atendimento.guiche}`;
+
+                        // Toca o áudio APENAS se a ficha em atendimento mudou E o áudio está habilitado
+                        if (audioEnabled && lastCalledFicha !== currentFicha && lastCalledFicha !== null) {
+                            console.log("updateDisplayPanel: Tentando tocar áudio para a ficha", currentFicha); // DEBUG
+                            notificationSound.play().then(() => {
+                                console.log("Áudio tocado com sucesso para a ficha", currentFicha); // DEBUG
+                            }).catch(e => {
+                                console.error("Erro ao tocar áudio na atualização:", e); // DEBUG
+                            });
+                        }
+                        lastCalledFicha = currentFicha;
                     } else {
                         atendendoFichaEl.innerText = '--';
                         atendendoGuicheEl.innerText = 'GUICHÊ --';
+                        lastCalledFicha = null;
+                        console.log("updateDisplayPanel: Nenhuma ficha em atendimento."); // DEBUG
                     }
 
                     // Fichas Chamadas Recentes
-                    chamadasListEl.innerHTML = ''; // Limpa a lista
+                    chamadasListEl.innerHTML = '';
                     if (data.fichas_chamadas_recentes && data.fichas_chamadas_recentes.length > 0) {
                         data.fichas_chamadas_recentes.forEach(item => {
                             const li = document.createElement('li');
@@ -232,22 +310,54 @@
                             li.innerText = `${item.ficha} GUICHÊ ${item.guiche}`;
                             chamadasListEl.appendChild(li);
                         });
+                        console.log("updateDisplayPanel: Fichas recentes atualizadas:", data.fichas_chamadas_recentes.map(f => f.ficha)); // DEBUG
                     } else {
                         chamadasListEl.innerHTML = '<li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li>';
+                        console.log("updateDisplayPanel: Nenhuma ficha recente."); // DEBUG
                     }
 
                 } else {
                     errorMessageEl.classList.remove('hidden');
                     errorMessageEl.innerText = `Erro: ${data.error || data.message || 'Falha ao obter dados.'}`;
-                    console.error('Erro na API:', data);
+                    console.error('Erro na API:', data); // DEBUG
                 }
 
             } catch (error) {
                 errorMessageEl.classList.remove('hidden');
                 errorMessageEl.innerText = `Erro de conexão: ${error.message}.`;
-                console.error('Falha ao conectar à API para obter dados do painel:', error);
+                console.error('Falha ao conectar à API para obter dados do painel:', error); // DEBUG
             }
         }
+
+        // Função para habilitar o áudio e esconder o overlay
+        document.getElementById('enableAudioButton').addEventListener('click', () => {
+            const notificationSound = document.getElementById('notificationSound');
+            const audioOverlay = document.getElementById('audioOverlay');
+            const audioEnableStatusEl = document.getElementById('audioEnableStatus');
+
+            // Esconde o overlay IMEDIATAMENTE ao clique
+            audioOverlay.classList.add('hidden'); 
+            audioEnabled = true; // Assume que o áudio está habilitado após a interação
+
+            console.log("Botão Habilitar Áudio clicado. Overlay escondido. audioEnabled =", audioEnabled); // DEBUG
+
+            // Tenta tocar o som para "desbloquear" o contexto de áudio
+            notificationSound.play().then(() => {
+                // Se a reprodução inicial for bem-sucedida, ótimo!
+                notificationSound.pause(); 
+                notificationSound.currentTime = 0; 
+                console.log("Áudio do clique inicial tocado e pausado com sucesso."); // DEBUG
+                audioEnableStatusEl.classList.add('hidden'); // Esconde qualquer mensagem de status anterior
+            }).catch(e => {
+                // Se a reprodução inicial falhar, exibe a mensagem de erro, mas o overlay já está escondido
+                console.error("Erro ao tentar tocar áudio no clique inicial (provável bloqueio do navegador):", e); // DEBUG
+                audioEnableStatusEl.classList.remove('hidden'); 
+                audioEnableStatusEl.innerText = "Não foi possível habilitar o áudio. Por favor, verifique as configurações de áudio do seu navegador (autoplay) e tente novamente. O painel principal está visível.";
+            });
+
+            // Força uma atualização imediata do painel após habilitar o áudio
+            updateDisplayPanel();
+        });
 
         // Chama a função imediatamente ao carregar a página
         updateDisplayPanel();
