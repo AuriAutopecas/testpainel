@@ -7,78 +7,82 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
         body {
             font-family: "Inter", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #FFFFFF; /* Fundo branco */
             margin: 0;
-            padding: 10px; /* Reduzido o padding do body */
+            padding: 8px; /* Padding do body levemente reduzido */
             box-sizing: border-box;
-            overflow: hidden;
-            /* Estilo de fundo pontilhado (vermelho/laranja) */
-            background-image: radial-gradient(#FF6347 1px, transparent 1px);
+            overflow-x: hidden; /* Evita barra de rolagem horizontal */
+            overflow-y: auto; /* Permite rolagem vertical se necessário */
+            background-color: #f0f2f5; /* Fundo cinza bem claro */
+            color: #333333; /* Cor de texto padrão escura */
+            background-image: radial-gradient(#ff6347 1px, transparent 1px); /* Mantido o fundo pontilhado */
             background-size: 10px 10px;
         }
         .panel-container {
-            background-color: #FFFFFF; /* Fundo branco para o contêiner principal */
-            border-radius: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            background-color: #ffffff; /* Fundo branco puro */
+            border-radius: 12px; /* Cantos mais suaves */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
             text-align: center;
             width: 100%;
-            max-width: 850px; /* Levemente reduzido para uma orientação mais horizontal compacta */
-            padding: 20px; /* Reduzido o padding do container */
+            max-width: 800px; /* Reduzido para mais compacto */
+            padding: 20px; /* Padding reduzido */
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Reduzido o espaçamento entre as seções */
-            /* Borda vermelha/laranja */
-            border: 5px solid #FF0000; /* Vermelho puro para a borda */
+            gap: 15px; /* Espaçamento entre as seções reduzido */
+            border: 1px solid #e5e7eb; /* Borda bem sutil */
         }
         .header-text {
-            font-size: 3em; /* Levemente reduzido */
-            font-weight: bold;
-            color: #FF0000; /* Vermelho para o título */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            background-color: transparent; /* Fundo transparente */
-            padding: 5px 0; /* Reduzido o padding */
-            border-radius: 10px;
+            font-size: 3em; /* Tamanho levemente reduzido para suavizar */
+            font-weight: 700; /* Menos bold que 800 */
+            color: #dc2626; /* Vermelho forte */
+            text-shadow: 0.5px 0.5px 1px rgba(0, 0, 0, 0.05); /* Sombra mais suave */
+            padding: 6px 0; /* Padding reduzido */
+            border-radius: 8px;
         }
         .sections-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* Duas colunas para layout horizontal */
-            gap: 15px; /* Reduzido o espaçamento entre as colunas */
-            margin-bottom: 15px; /* Reduzido a margem inferior */
+            grid-template-columns: 1.5fr 1fr; /* Proporção para 'Atendendo' maior */
+            gap: 15px; /* Espaçamento entre as colunas reduzido */
+            margin-bottom: 15px; /* Margem inferior reduzida */
         }
         .section-box {
-            background-color: #FFFFFF; /* Fundo branco para as caixas internas */
-            border-radius: 15px;
-            padding: 15px; /* Reduzido o padding da caixa de seção */
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: #f8f8f8; /* Fundo cinza muito claro */
+            border-radius: 10px; /* Cantos arredondados */
+            padding: 18px; /* Padding reduzido */
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08); /* Sombra interna mais suave */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid #FF0000; /* Borda vermelha para as caixas internas */
+            border: 1px solid #d1d5db; /* Borda sutil */
         }
         .section-title {
-            font-size: 1.6em; /* Levemente reduzido */
+            font-size: 1.6em; /* Tamanho reduzido */
             font-weight: bold;
-            color: #333333; /* Preto para os títulos das seções */
-            margin-bottom: 8px; /* Reduzido a margem inferior */
+            color: #555555; /* Cinza médio */
+            margin-bottom: 10px; /* Margem reduzida */
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .ficha-atendendo {
-            font-size: 4.5em; /* Levemente reduzido */
-            font-weight: bold;
-            color: #28a745; /* Verde para a ficha principal */
-            /* ANIMAÇÃO DE PULSO REMOVIDA AQUI */
-            /* Certifique-se de que esta linha NÃO contém 'animation: pulse...' */
+            font-size: 5em; /* Tamanho levemente reduzido */
+            font-weight: 900;
+            color: #22c55e; /* Verde vibrante */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+            animation: none !important; /* GARANTE A REMOÇÃO DE QUALQUER ANIMAÇÃO */
         }
         .guiche-atendendo {
-            font-size: 2.2em; /* Levemente reduzido */
+            font-size: 2.2em; /* Tamanho reduzido */
             font-weight: bold;
-            color: #333333; /* Preto para o guichê */
+            color: #333333; /* Preto */
+            margin-top: 6px; /* Margem reduzida */
         }
         .chamadas-list {
             list-style: none;
@@ -87,71 +91,106 @@
             text-align: center;
         }
         .chamadas-list-item {
-            font-size: 1.6em; /* Levemente reduzido */
+            font-size: 1.5em; /* Tamanho reduzido */
             font-weight: bold;
-            color: #FF0000; /* Vermelho para chamadas */
-            margin-bottom: 4px; /* Reduzido a margem inferior */
+            color: #ef4444; /* Vermelho padrão */
+            margin-bottom: 5px; /* Margem reduzida */
             white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        /* Estilo para a área da mensagem marquee */
-        .marquee-box {
-            background-color: #FFFACD; /* Amarelo claro/creme para a marquee (LemonChiffon) */
-            border-radius: 15px;
-            padding: 10px 15px; /* Reduzido o padding */
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
-            font-size: 2em; /* Levemente reduzido */
+        /* Estilo para a área da mensagem aleatória */
+        .random-message-box {
+            background-color: #fefce8; /* Amarelo muito claro */
+            border-radius: 10px;
+            padding: 12px 18px; /* Padding reduzido */
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+            font-size: 1.8em; /* Tamanho reduzido */
             font-weight: bold;
-            color: #333333; /* Preto para o texto da marquee */
-            overflow: hidden; 
-            border: 1px solid #FF0000; /* Borda vermelha para a marquee */
+            color: #555555; /* Cinza médio */
+            min-height: 1.5em; /* Garante altura mínima */
+            display: flex; /* Para centralizar o texto verticalmente */
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d1d5db; /* Borda sutil */
+            overflow: hidden; /* Importante para as animações de slide */
+            position: relative; /* Necessário para posicionar o texto animado */
         }
-        .marquee-text {
-            white-space: nowrap; 
-            display: inline-block; 
-            padding-left: 100%; 
-            animation: marquee 15s linear infinite; 
+
+        /* Animações de entrada */
+        @keyframes slideInFromTop {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
-        /* Animação de rolagem (marquee) */
-        @keyframes marquee {
-            0%   { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
+        @keyframes slideInFromBottom {
+            0% { transform: translateY(100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
+        @keyframes slideInFromLeft {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInFromRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Classes para aplicar as animações */
+        .animated-text { /* Nova classe para o span interno */
+            display: inline-block; /* Necessário para transform */
+            width: 100%; /* Ocupa a largura total para animação */
+            text-align: center; /* Centraliza o texto */
+            animation-duration: 0.8s; /* Duração padrão da animação */
+            animation-timing-function: ease-out; /* Suaviza o início/fim */
+            animation-fill-mode: forwards; /* Mantém o estado final da animação */
+            opacity: 0; /* Inicia invisível */
+        }
+        .animated-text.animate-top { animation-name: slideInFromTop; }
+        .animated-text.animate-bottom { animation-name: slideInFromBottom; }
+        .animated-text.animate-left { animation-name: slideInFromLeft; }
+        .animated-text.animate-right { animation-name: slideInFromRight; }
+
 
         .no-data-message {
-            font-size: 1.6em; /* Levemente reduzido */
-            color: #555;
-            margin-top: 15px; /* Reduzido a margem superior */
+            font-size: 1.4em; /* Tamanho reduzido */
+            color: #777777; /* Cinza mais suave */
+            margin-top: 12px; /* Margem reduzida */
         }
 
-        /* ANIMAÇÃO DE PULSO REMOVIDA AQUI TAMBÉM */
-        /* Certifique-se de que este bloco @keyframes pulse está COMPLETAMENTE AUSENTE ou COMENTADO */
-        /* @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.05); opacity: 0.9; }
-        } */
-
         /* Responsividade */
-        @media (max-width: 768px) {
-            .panel-container { padding: 15px; max-width: 95%; } 
-            .header-text { font-size: 2em; }
-            .sections-grid { grid-template-columns: 1fr; } /* Em telas menores, volta para coluna única */
-            .section-title { font-size: 1.4em; }
-            .ficha-atendendo { font-size: 3.5em; }
-            .guiche-atendendo { font-size: 1.8em; }
-            .chamadas-list-item { font-size: 1.4em; } 
-            .marquee-box { font-size: 1.6em; padding: 8px 12px; }
+        @media (max-width: 1024px) {
+            .panel-container { max-width: 700px; padding: 18px; gap: 12px; }
+            .header-text { font-size: 2.8em; }
+            .sections-grid { gap: 15px; }
+            .section-title { font-size: 1.5em; }
+            .ficha-atendendo { font-size: 4.5em; }
+            .guiche-atendendo { font-size: 2em; }
+            .chamadas-list-item { font-size: 1.4em; }
+            .random-message-box { font-size: 1.6em; padding: 10px 15px; }
             .no-data-message { font-size: 1.3em; }
         }
 
+        @media (max-width: 768px) {
+            .panel-container { padding: 12px; max-width: 95%; } 
+            .header-text { font-size: 2.2em; }
+            .sections-grid { grid-template-columns: 1fr; gap: 10px; } /* Em telas menores, volta para coluna única */
+            .section-title { font-size: 1.3em; }
+            .ficha-atendendo { font-size: 3.5em; }
+            .guiche-atendendo { font-size: 1.8em; }
+            .chamadas-list-item { font-size: 1.2em; } 
+            .random-message-box { font-size: 1.4em; padding: 8px 12px; }
+            .no-data-message { font-size: 1.1em; }
+        }
+
         @media (max-width: 480px) {
-            .panel-container { padding: 10px; max-width: 98%; } 
+            .panel-container { padding: 8px; max-width: 98%; } 
             .header-text { font-size: 1.8em; }
             .section-title { font-size: 1.1em; }
             .ficha-atendendo { font-size: 2.8em; }
-            .guiche-atendendo { font-size: 1.3em; }
-            .chamadas-list-item { font-size: 1.1em; } 
-            .marquee-box { font-size: 1.3em; padding: 6px 8px; }
-            .no-data-message { font-size: 1.1em; }
+            .guiche-atendendo { font-size: 1.5em; }
+            .chamadas-list-item { font-size: 1em; } 
+            .random-message-box { font-size: 1.2em; padding: 6px 10px; }
+            .no-data-message { font-size: 1em; }
         }
 
         /* Estilo para o overlay de habilitação de áudio */
@@ -161,38 +200,39 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(240, 242, 245, 0.95); /* Fundo claro com transparência */
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000; /* Garante que fique acima de tudo */
+            z-index: 1000;
             flex-direction: column;
             gap: 20px;
         }
         .audio-overlay-button {
-            background-color: #28a745; /* Verde vibrante */
+            background-color: #22c55e; /* Verde vibrante */
             color: white;
-            padding: 20px 40px;
+            padding: 18px 35px; /* Botão levemente menor */
             border-radius: 10px;
-            font-size: 2.5em;
+            font-size: 2.5em; /* Texto levemente menor */
             font-weight: bold;
             cursor: pointer;
             border: none;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
         .audio-overlay-button:hover {
-            background-color: #218838;
-            transform: translateY(-3px);
+            background-color: #16a34a;
+            transform: translateY(-2px);
         }
         .audio-overlay-button:active {
             transform: translateY(0);
         }
         .audio-overlay-message {
-            color: white;
-            font-size: 1.5em;
+            color: #333333; /* Texto escuro */
+            font-size: 1.5em; /* Texto levemente menor */
             text-align: center;
             max-width: 80%;
+            text-shadow: none;
         }
     </style>
 </head>
@@ -220,16 +260,17 @@
             </div>
         </div>
 
-        <!-- Seção MENSAGEM MARQUEE -->
-        <div class="marquee-box">
-            <span id="marqueeMessage" class="marquee-text">Bem-vindo ao nosso atendimento! Aguarde sua vez e obrigado pela paciência.</span>
+        <!-- Seção MENSAGEM ALEATÓRIA -->
+        <div id="randomMessageBox" class="random-message-box">
+            <!-- O span abaixo é onde o texto da mensagem será exibido e animado -->
+            <span id="animatedMessageText" class="animated-text"></span>
         </div>
 
         <p id="loadingMessage" class="no-data-message">Carregando dados...</p>
         <p id="errorMessage" class="no-data-message hidden text-red-500">Erro ao carregar dados.</p>
     </div>
 
-    <!-- Elemento de áudio -->
+    <!-- Elemento de áudio (mantido, mas a fala será prioritária) -->
     <audio id="notificationSound" src="beep.mp3" preload="auto"></audio>
     <!-- 
         IMPORTANTE: Para que o áudio funcione, você DEVE:
@@ -251,21 +292,133 @@
         // SUA URL DA API DO REPLIT
         const API_BASE_URL = "https://945e81db-7b7e-4538-9480-530153b93654-00-dv9w0qyz7nyp.riker.replit.dev/";
         const REFRESH_INTERVAL = 10000; // Atualiza a cada 10 segundos (10000 milissegundos)
+        const MESSAGE_CHANGE_INTERVAL = 7000; // Troca de mensagem a cada 7 segundos
+        const ANIMATION_DURATION_MS = 800; // Duração da animação em milissegundos
+        const SPEECH_DELAY_MS = 1200; // Atraso em milissegundos para a fala após o beep (AUMENTADO)
 
-        let lastCalledFicha = null; // Variável para armazenar a última ficha chamada e evitar tocar o som repetidamente
-        let audioEnabled = false; // Nova variável para controlar se o áudio está habilitado
+        let lastCalledFicha = null;
+        let audioEnabled = false;
+        let selectedVoice = null; // Variável para armazenar a voz selecionada
+
+        // Array de mensagens para alternar
+        const messages = [
+            "Bem-vindo ao nosso atendimento! Agradecemos a sua paciência.",
+            "Aguarde sua vez, em breve você será chamado.",
+            "Para um atendimento mais rápido, tenha seus documentos em mãos.",
+            "Nosso objetivo é oferecer o melhor atendimento para você!",
+            "Obrigado por escolher nossos serviços. Tenha um ótimo dia!"
+        ];
+        let currentMessageIndex = 0; // Para controlar qual mensagem está sendo exibida
+        let lastAnimationClass = ''; // Para evitar repetir a mesma animação imediatamente
+
+        // Função para selecionar a voz feminina
+        function setFemaleVoice() {
+            // Obtém todas as vozes disponíveis
+            const voices = speechSynthesis.getVoices();
+            console.log("Vozes disponíveis:", voices.map(v => `${v.name} (${v.lang})`));
+
+            // Tenta encontrar uma voz feminina em português do Brasil
+            // Prioriza vozes com "Google" ou "Microsoft" no nome para qualidade
+            selectedVoice = voices.find(voice => 
+                voice.lang === 'pt-BR' && 
+                (voice.name.includes('Google') || voice.name.includes('Microsoft')) &&
+                (voice.name.includes('Female') || voice.name.includes('Feminina') || voice.name.includes('Amália') || voice.name.includes('Luciana')) // Adicione termos comuns para vozes femininas
+            );
+
+            if (!selectedVoice) {
+                // Se não encontrar uma voz "ideal", tenta qualquer voz feminina em pt-BR
+                selectedVoice = voices.find(voice => 
+                    voice.lang === 'pt-BR' && 
+                    (voice.name.includes('Female') || voice.name.includes('Feminina') || voice.name.includes('Amália') || voice.name.includes('Luciana'))
+                );
+            }
+
+            if (!selectedVoice) {
+                // Se ainda não encontrar, tenta qualquer voz em pt-BR
+                selectedVoice = voices.find(voice => voice.lang === 'pt-BR');
+            }
+
+            if (!selectedVoice) {
+                // Último recurso: tenta qualquer voz feminina disponível, independentemente do idioma
+                selectedVoice = voices.find(voice => 
+                    voice.name.includes('Female') || voice.name.includes('Feminina') || voice.name.includes('Amália') || voice.name.includes('Luciana')
+                );
+            }
+
+            if (selectedVoice) {
+                console.log("Voz selecionada:", selectedVoice.name);
+            } else {
+                console.warn("Nenhuma voz feminina em pt-BR encontrada. Usando a voz padrão do navegador.");
+            }
+        }
+
+        // Adiciona um listener para quando as vozes estiverem carregadas
+        if ('speechSynthesis' in window) {
+            speechSynthesis.onvoiceschanged = setFemaleVoice;
+            // Tenta definir a voz imediatamente, caso já estejam carregadas
+            setFemaleVoice(); 
+        }
+
+        // Função para falar a ficha
+        function falarFicha(ficha, guiche) {
+            if ('speechSynthesis' in window) {
+                const texto = new SpeechSynthesisUtterance(`Ficha número ${ficha}, por favor, dirija-se ao guichê ${guiche}`);
+                texto.lang = "pt-BR";
+                texto.rate = 0.9;
+                texto.volume = 1;
+                texto.pitch = 1;
+
+                // Define a voz se uma foi selecionada
+                if (selectedVoice) {
+                    texto.voice = selectedVoice;
+                }
+
+                speechSynthesis.cancel();
+                speechSynthesis.speak(texto);
+                console.log(`Fala iniciada: Ficha ${ficha}, Guichê ${guiche}`);
+            } else {
+                console.warn("SpeechSynthesis API não suportada neste navegador.");
+            }
+        }
+
+        // Função para exibir uma mensagem aleatória com animação
+        function displayRandomMessage() {
+            const animatedMessageText = document.getElementById('animatedMessageText');
+            
+            // 1. Seleciona a próxima mensagem
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * messages.length);
+            } while (messages.length > 1 && newIndex === currentMessageIndex);
+            currentMessageIndex = newIndex;
+
+            // 2. Seleciona uma animação aleatória
+            const animationClasses = ['animate-top', 'animate-bottom', 'animate-left', 'animate-right'];
+            let newAnimationClass;
+            do {
+                newAnimationClass = animationClasses[Math.floor(Math.random() * animationClasses.length)];
+            } while (animationClasses.length > 1 && newAnimationClass === lastAnimationClass);
+            lastAnimationClass = newAnimationClass;
+
+            // 3. Remove a classe de animação anterior (se houver) e define o texto
+            animatedMessageText.className = 'animated-text'; // Reseta a classe para a base 'animated-text'
+            animatedMessageText.innerText = messages[currentMessageIndex];
+
+            // 4. Adiciona a nova classe de animação
+            animatedMessageText.classList.add(newAnimationClass);
+        }
+
 
         async function updateDisplayPanel() {
             const atendendoFichaEl = document.getElementById('atendendoFicha');
-            const atendendoGuicheEl = document.getElementById('atendendoGuiche'); 
+            const atendendoGuicheEl = document.getElementById('atendendoGuiche');
             const chamadasListEl = document.getElementById('chamadasList');
-            const marqueeMessageEl = document.getElementById('marqueeMessage');
             const loadingMessageEl = document.getElementById('loadingMessage');
             const errorMessageEl = document.getElementById('errorMessage');
-            const notificationSound = document.getElementById('notificationSound');
+            const notificationSound = document.getElementById('notificationSound'); 
 
-            console.log("updateDisplayPanel: Iniciando atualização do painel."); // DEBUG
-            console.log("updateDisplayPanel: audioEnabled =", audioEnabled); // DEBUG
+            console.log("updateDisplayPanel: Iniciando atualização do painel.");
+            console.log("updateDisplayPanel: audioEnabled =", audioEnabled);
 
             loadingMessageEl.classList.remove('hidden');
             errorMessageEl.classList.add('hidden');
@@ -282,32 +435,37 @@
                 if (response.ok) {
                     loadingMessageEl.classList.add('hidden');
 
-                    // Ficha em Atendimento
-                    if (data.ficha_em_atendimento && data.ficha_em_atendimento.ficha) {
+                    if (data.ficha_em_atendimento && data.ficha_em_atendimento.ficha) { 
                         const currentFicha = data.ficha_em_atendimento.ficha;
-                        atendendoFichaEl.innerText = currentFicha;
-                        atendendoGuicheEl.innerText = `GUICHÊ ${data.ficha_em_atendimento.guiche}`;
+                        const currentGuiche = data.ficha_em_atendimento.guiche;
 
-                        // Toca o áudio APENAS se a ficha em atendimento mudou E o áudio está habilitado
-                        if (audioEnabled && lastCalledFicha !== currentFicha && lastCalledFicha !== null) {
-                            console.log("updateDisplayPanel: Tentando tocar áudio para a ficha", currentFicha); // DEBUG
+                        atendendoFichaEl.innerText = currentFicha;
+                        atendendoGuicheEl.innerText = `GUICHÊ ${currentGuiche}`;
+
+                        if (audioEnabled && lastCalledFicha !== currentFicha) { 
+                            console.log("updateDisplayPanel: Tentando tocar beep e falar ficha", currentFicha, "Guichê", currentGuiche);
+                            
+                            // Tenta tocar o beep
                             notificationSound.play().then(() => {
-                                console.log("Áudio tocado com sucesso para a ficha", currentFicha); // DEBUG
+                                console.log("Beep tocado com sucesso.");
                             }).catch(e => {
-                                console.error("Erro ao tocar áudio na atualização:", e); // DEBUG
-                                // Se o áudio falhar aqui, pode ser um bloqueio persistente do navegador.
-                                // A mensagem de status de áudio já foi exibida pelo clique inicial.
+                                console.error("Erro ao tocar beep:", e);
+                            }).finally(() => { // Garante que a fala aconteça mesmo se o beep falhar
+                                // Atraso a fala após o beep (ou tentativa de beep)
+                                setTimeout(() => {
+                                    falarFicha(currentFicha, currentGuiche); 
+                                }, SPEECH_DELAY_MS);
                             });
                         }
                         lastCalledFicha = currentFicha;
                     } else {
+                        // Se não houver ficha em atendimento, reseta o display
                         atendendoFichaEl.innerText = '--';
                         atendendoGuicheEl.innerText = 'GUICHÊ --';
-                        lastCalledFicha = null;
-                        console.log("updateDisplayPanel: Nenhuma ficha em atendimento."); // DEBUG
+                        lastCalledFicha = null; // Reseta lastCalledFicha para que a próxima chamada toque o som
+                        console.log("updateDisplayPanel: Nenhuma ficha em atendimento.");
                     }
 
-                    // Fichas Chamadas Recentes
                     chamadasListEl.innerHTML = '';
                     if (data.fichas_chamadas_recentes && data.fichas_chamadas_recentes.length > 0) {
                         data.fichas_chamadas_recentes.forEach(item => {
@@ -316,59 +474,58 @@
                             li.innerText = `${item.ficha} GUICHÊ ${item.guiche}`;
                             chamadasListEl.appendChild(li);
                         });
-                        console.log("updateDisplayPanel: Fichas recentes atualizadas:", data.fichas_chamadas_recentes.map(f => f.ficha)); // DEBUG
+                        console.log("updateDisplayPanel: Fichas recentes atualizadas:", data.fichas_chamadas_recentes.map(f => f.ficha));
                     } else {
                         chamadasListEl.innerHTML = '<li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li><li class="chamadas-list-item">--</li>';
-                        console.log("updateDisplayPanel: Nenhuma ficha recente."); // DEBUG
+                        console.log("updateDisplayPanel: Nenhuma ficha recente.");
                     }
 
                 } else {
                     errorMessageEl.classList.remove('hidden');
                     errorMessageEl.innerText = `Erro: ${data.error || data.message || 'Falha ao obter dados.'}`;
-                    console.error('Erro na API:', data); // DEBUG
+                    console.error('Erro na API:', data);
                 }
 
             } catch (error) {
                 errorMessageEl.classList.remove('hidden');
                 errorMessageEl.innerText = `Erro de conexão: ${error.message}.`;
-                console.error('Falha ao conectar à API para obter dados do painel:', error); // DEBUG
+                console.error('Falha ao conectar à API para obter dados do painel:', error);
             }
         }
 
-        // Função para habilitar o áudio e esconder o overlay
         document.getElementById('enableAudioButton').addEventListener('click', () => {
             const notificationSound = document.getElementById('notificationSound');
             const audioOverlay = document.getElementById('audioOverlay');
             const audioEnableStatusEl = document.getElementById('audioEnableStatus');
 
-            // Esconde o overlay IMEDIATAMENTE ao clique
             audioOverlay.classList.add('hidden'); 
-            audioEnabled = true; // Assume que o áudio está habilitado após a interação
+            audioEnabled = true;
 
-            console.log("Botão Habilitar Áudio clicado. Overlay escondido. audioEnabled =", audioEnabled); // DEBUG
+            console.log("Botão Habilitar Áudio clicado. Overlay escondido. audioEnabled =", audioEnabled);
 
-            // Tenta tocar o som para "desbloquear" o contexto de áudio
+            // Tenta tocar um som (pode ser um beep silencioso) para "desbloquear" o contexto de áudio
+            // Isso é crucial para que a SpeechSynthesis API funcione depois.
+            notificationSound.volume = 0; // Toca silenciosamente
             notificationSound.play().then(() => {
-                // Se a reprodução inicial for bem-sucedida, ótimo!
                 notificationSound.pause(); 
                 notificationSound.currentTime = 0; 
-                console.log("Áudio do clique inicial tocado e pausado com sucesso."); // DEBUG
-                audioEnableStatusEl.classList.add('hidden'); // Esconde qualquer mensagem de status anterior
+                notificationSound.volume = 1; // Restaura o volume, caso queira usar o beep.mp3 depois
+                console.log("Contexto de áudio desbloqueado com sucesso.");
+                audioEnableStatusEl.classList.add('hidden');
             }).catch(e => {
-                // Se a reprodução inicial falhar, exibe a mensagem de erro, mas o overlay já está escondido
-                console.error("Erro ao tentar tocar áudio no clique inicial (provável bloqueio do navegador):", e); // DEBUG
+                console.error("Erro ao tentar desbloquear o contexto de áudio (provável bloqueio do navegador):", e);
                 audioEnableStatusEl.classList.remove('hidden'); 
                 audioEnableStatusEl.innerText = "Não foi possível habilitar o áudio. Por favor, verifique as configurações de áudio do seu navegador (autoplay) e tente novamente. O painel principal está visível.";
             });
 
-            // Força uma atualização imediata do painel após habilitar o áudio
             updateDisplayPanel();
         });
 
-        // Chama a função imediatamente ao carregar a página
-        updateDisplayPanel();
+        // Inicializa a primeira mensagem e o intervalo para troca
+        displayRandomMessage();
+        setInterval(displayRandomMessage, MESSAGE_CHANGE_INTERVAL);
 
-        // Configura a atualização automática a cada X segundos
+        updateDisplayPanel();
         setInterval(updateDisplayPanel, REFRESH_INTERVAL);
     </script>
 </body>
